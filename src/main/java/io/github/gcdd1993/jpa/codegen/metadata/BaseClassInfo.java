@@ -17,6 +17,11 @@ public abstract class BaseClassInfo {
     protected String className;
 
     /**
+     * 全类名
+     */
+    protected String typeName;
+
+    /**
      * 包名
      */
     protected String packageName;

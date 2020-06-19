@@ -14,6 +14,7 @@ import java.util.Map;
  */
 @Data
 public class RenderingRequest {
+    // 在模板文件中使用的属性
     private String ftlName;
     private String ftlPath;
     private String savePath;
@@ -25,6 +26,7 @@ public class RenderingRequest {
     private String comments;
     private EntityInfo entity;
     private List<String> imports;
+    // 一个Entity对应多个响应，如Controller，Service等的代码
     private Map<String, RenderingResponse> lastRenderResponse;
     private Map<String, String> otherParams;
 }

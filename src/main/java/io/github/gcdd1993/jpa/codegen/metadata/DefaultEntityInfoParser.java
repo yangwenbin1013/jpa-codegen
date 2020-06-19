@@ -59,10 +59,11 @@ public class DefaultEntityInfoParser extends BaseEntityParser {
             }
 
             // 只解析出基本类型
-            if (javaLangType && !isId) {
+            if (/*javaLangType &&*/ !isId) {
                 FieldInfo fieldInfo = new FieldInfo();
                 fieldInfo.setClassName(f.getType().getSimpleName());
-                fieldInfo.setPackageName(f.getType().getTypeName());
+                fieldInfo.setTypeName(f.getType().getTypeName());
+                fieldInfo.setPackageName(packageType == null ? f.getType().getTypeName() : packageType.getName());
 
                 fieldInfo.setName(f.getName());
 
@@ -74,7 +75,9 @@ public class DefaultEntityInfoParser extends BaseEntityParser {
                     for (Annotation annotation : fieldAnnotations) {
                         AnnotationInfo annotationInfo = new AnnotationInfo();
                         annotationInfo.setClassName(annotation.annotationType().getSimpleName());
+                        annotationInfo.setTypeName(annotation.annotationType().getTypeName());
                         annotationInfo.setPackageName(annotation.annotationType().getPackage().getName());
+                        annotationInfos.add(annotationInfo);
                     }
                     fieldInfo.setAnnotations(annotationInfos);
                 }
@@ -95,9 +98,11 @@ public class DefaultEntityInfoParser extends BaseEntityParser {
         // 尝试从类注解获取主键信息
         IdClass idClassAnnotation = clazz.getAnnotation(javax.persistence.IdClass.class);
         if (idClassAnnotation != null) {
+            Package p = idClassAnnotation.value().getPackage();
             IdInfo idInfo = new IdInfo();
             idInfo.setClassName(idClassAnnotation.value().getSimpleName());
-            idInfo.setPackageName(idClassAnnotation.value().getTypeName());
+            idInfo.setTypeName(idClassAnnotation.value().getTypeName());
+            idInfo.setPackageName(p == null ? idClassAnnotation.value().getTypeName() : p.getName());
             return idInfo;
         }
         // 尝试获取第一个带主键注解的字段
@@ -107,7 +112,9 @@ public class DefaultEntityInfoParser extends BaseEntityParser {
                 Field field = fieldByAnnotation.get();
                 IdInfo idInfo = new IdInfo();
                 idInfo.setClassName(field.getType().getSimpleName());
-                idInfo.setPackageName(field.getType().getTypeName());
+                idInfo.setTypeName(field.getType().getTypeName());
+                idInfo.setPackageName(field.getType().getPackage() == null ? field.getType().getTypeName()
+                        : field.getType().getPackage().getName());
                 return idInfo;
             }
         }

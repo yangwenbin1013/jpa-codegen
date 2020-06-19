@@ -26,17 +26,21 @@ public class DefaultRender implements IRender {
     @Override
     public final RenderingResponse render(EntityInfo entityInfo, String module) {
         RenderingRequest renderingRequest = new RenderingRequest();
-
         renderingRequest.setLastRenderResponse(lastRenderingResponseMap);
 
+        // 从config中，获取相应模块的配置，如Controller，Service等的配置
         ModuleConfig moduleConfig = config.getModuleConfigMap().get(module);
-        renderingRequest.setClassName(entityInfo.getClassName() + moduleConfig.getClassNameSuffix());
+        // 设置要生成的类的类名
+        renderingRequest.setClassName(entityInfo.getClassName().replace(config.getEntityFlag().substring(0, 1).toUpperCase().concat(config.getEntityFlag().substring(1)),
+                moduleConfig.getClassNameSuffix()));
+        // 设置要生成的类的包名
         String packageName = entityInfo.getPackageName().replace(config.getEntityFlag(), moduleConfig.getFlag());
-
         renderingRequest.setPackageName(packageName);
+        // 设置生成的文件的路径
         renderingRequest.setSavePath("src/main/java/" + packageName.replace(".", "/") + "/");
+        // 设置模板文件的名字
         renderingRequest.setFtlName(moduleConfig.getFtlName());
-
+        // 设置模板文件的目录
         renderingRequest.setFtlPath(config.getFtlPath());
         renderingRequest.setCover(config.isCover());
 
@@ -60,12 +64,13 @@ public class DefaultRender implements IRender {
     }
 
     private List<String> checkImports(EntityInfo entityInfo) {
-        List<String> imports = new ArrayList<>();
-        String packageName = entityInfo.getId().getPackageName();
-        if (!"java.lang".equals(packageName)) {
-            imports.add(packageName);
-        }
-        return imports;
+        Set<String> imports = new HashSet<>();
+        entityInfo.getFields().parallelStream().forEach(t -> {
+            if (!t.getTypeName().contains("java.lang") && t.getTypeName().indexOf(".") > -1) {
+                imports.add(t.getTypeName());
+            }
+        });
+        return new ArrayList<>(imports);
     }
 
 }

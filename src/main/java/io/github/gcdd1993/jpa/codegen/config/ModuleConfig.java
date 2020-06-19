@@ -10,6 +10,7 @@ import lombok.Data;
  */
 @Data
 public class ModuleConfig {
+    // 模块的约定信息配置，ftl模板文件名
     private String flag;
     private String packageName;
     private String classNameSuffix;

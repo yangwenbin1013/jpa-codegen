@@ -16,13 +16,14 @@ import java.util.Map;
 @Data
 public class CodeGeneratorConfig {
     private String entityFlag;
+    // 配置哪些实体类需要生成代码
     private List<Class<?>> entityClasses = new ArrayList<>(256);
     private String ftlPath;
     private String author;
     private String date;
     private String comments;
     private boolean cover;
-
+    // 注册生成哪些模块的代码，如Controller，Service等
     private Map<String, ModuleConfig> moduleConfigMap = new HashMap<>();
 
     private Map<String, String> otherParams;

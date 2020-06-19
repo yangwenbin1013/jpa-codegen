@@ -10,6 +10,7 @@ import lombok.Data;
  */
 @Data
 public class RenderingResponse {
+    // 解析响应，一个Entity会对应多个解析响应，如Controller，Service等的响应
     private boolean success;
     private String errorMsg;
     private String ftlName;

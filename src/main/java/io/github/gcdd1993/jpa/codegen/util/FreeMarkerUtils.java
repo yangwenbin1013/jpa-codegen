@@ -66,8 +66,11 @@ public class FreeMarkerUtils {
      */
     public static RenderingResponse process(RenderingRequest renderingRequest) {
         RenderingResponse response = new RenderingResponse();
+        // 类名
         response.setClassName(renderingRequest.getClassName());
+        // 包名
         response.setPackageName(renderingRequest.getPackageName());
+        // 模板文件名
         response.setFtlName(renderingRequest.getFtlName());
 
         String code = render(renderingRequest);

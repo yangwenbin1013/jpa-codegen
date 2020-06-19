@@ -1,4 +1,5 @@
 import io.github.gcdd1993.jpa.codegen.CodeGenerator;
+import io.github.gcdd1993.jpa.codegen.entity.UnloadWeightConfigEntity;
 import org.junit.Test;
 
 /**
@@ -12,11 +13,12 @@ public class ApplicationTest {
     @Test
     public void generate() {
 
-        new CodeGenerator("/example.properties")
+        new CodeGenerator("src/main/resources/example.properties")
                 .registerRender("form")
                 .registerRender("repository")
                 .registerRender("service")
                 .registerRender("controller")
+                .clazzInclude(UnloadWeightConfigEntity.class)
                 .generate();
 
     }
