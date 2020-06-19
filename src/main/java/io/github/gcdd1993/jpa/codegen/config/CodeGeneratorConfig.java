@@ -15,6 +15,7 @@ import java.util.Map;
  */
 @Data
 public class CodeGeneratorConfig {
+    // entity的文件夹名
     private String entityFlag;
     // 配置哪些实体类需要生成代码
     private List<Class<?>> entityClasses = new ArrayList<>(256);
